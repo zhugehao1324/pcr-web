@@ -42,13 +42,13 @@ with col_micro:
         # 🚨 修改点 1：上限改成 8
         for i, dna in enumerate(st.session_state.dna_pool[:8]):
             html_micro += f"<div class='dna-card' style='border-left-color:#ff9800;'><div style='color:#888;'>DNA分子链 {i+1} 解链</div>"
-            html_micro += f<div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'])}</span> <span>3'</span></div><div class='separator'>-- 氢键断裂 --</div><div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'])}</span> <span>5'</span></div>
+            html_micro += f"<div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'])}</span> <span>3'</span></div><div class='separator'>-- 氢键断裂 --</div><div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'])}</span> <span>5'</span></div>"
             html_micro += "</div>"
     else:
         # 🚨 修改点 2：上限改成 8
         for i, dna in enumerate(st.session_state.dna_pool[:8]):
             html_micro += f"<div class='dna-card'><div style='color:#888;'>DNA分子链 {i+1}</div>"
-            <div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'])}</span> <span>3'</span></div><div class='separator'>| | | | | | | | | | |</div><div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'])}</span> <span>5'</span></div>
+            html_micro += f"<div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'])}</span> <span>3'</span></div><div class='separator'>| | | | | | | | | | |</div><div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'])}</span> <span>5'</span></div>"
             html_micro += "</div>"
 
     html_micro += "</div></div>"
