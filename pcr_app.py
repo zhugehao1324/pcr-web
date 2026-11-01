@@ -25,7 +25,7 @@ col_micro, col_macro = st.columns([2, 1])
 with col_micro:
     st.subheader("🔬 微观：DNA 结构变化")
     
-    st.markdown("<style>.tube{background-color:#f0f8ff;border:2px solid #add8e6;border-radius:10px;padding:15px;min-height:400px;}.dna-row{display:flex;flex-wrap:wrap;gap:15px;}.dna-card{background-color:#fff;border:1px solid #ccc;border-left:5px solid #4CAF50;padding:12px;border-radius:5px;font-family:monospace;font-size:18px;line-height:1.8;letter-spacing:2px;box-shadow:2px 2px 5px rgba(0,0,0,0.1);width:340px;}.green{color:#2e7d32;font-weight:bold;}.yellow{color:#d4a017;font-weight:bold;background-color:#fff3cd;padding:2px;border-radius:3px;}.red{color:#d62728;font-weight:bold;background-color:#fae6e6;padding:2px;border-radius:3px;}.separator{color:#aaa;font-size:14px;text-align:center;margin:4px 0;}</style>", unsafe_allow_html=True)
+    st.markdown("<style>.tube{background-color:#f0f8ff;border:2px solid #add8e6;border-radius:10px;padding:15px;min-height:400px;}.dna-row{display:flex;flex-wrap:wrap;gap:15px;}.dna-card{background-color:#fff;border:1px solid #ccc;border-left:5px solid #4CAF50;padding:12px;border-radius:5px;font-family:monospace;font-size:16px;line-height:1.8;letter-spacing:1px;box-shadow:2px 2px 5px rgba(0,0,0,0.1);width:330px;}.seq-line{display:flex;justify-content:space-between;align-items:center;white-space:nowrap;margin:4px 0;}.green{color:#2e7d32;font-weight:bold;}.yellow{color:#d4a017;font-weight:bold;background-color:#fff3cd;padding:2px;border-radius:3px;}.red{color:#d62728;font-weight:bold;background-color:#fae6e6;padding:2px;border-radius:3px;}.separator{color:#aaa;font-size:12px;text-align:center;margin:2px 0;}</style>", unsafe_allow_html=True)
     
     html_micro = "<div class='tube'><div class='dna-row'>"
     
@@ -42,13 +42,13 @@ with col_micro:
         # 🚨 修改点 1：上限改成 8
         for i, dna in enumerate(st.session_state.dna_pool[:8]):
             html_micro += f"<div class='dna-card' style='border-left-color:#ff9800;'><div style='color:#888;'>DNA分子链 {i+1} 解链</div>"
-            html_micro += f"<div>5' {render_strand(dna['strand1'])} 3'</div><div class='separator'>-- 氢键断裂 --</div><div>3' {render_strand(dna['strand2'])} 5'</div>"
+            html_micro += f<div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'])}</span> <span>3'</span></div><div class='separator'>-- 氢键断裂 --</div><div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'])}</span> <span>5'</span></div>
             html_micro += "</div>"
     else:
         # 🚨 修改点 2：上限改成 8
         for i, dna in enumerate(st.session_state.dna_pool[:8]):
             html_micro += f"<div class='dna-card'><div style='color:#888;'>DNA分子链 {i+1}</div>"
-            html_micro += f"<div>5' {render_strand(dna['strand1'])} 3'</div><div class='separator'>| | | | | | | | | | |</div><div>3' {render_strand(dna['strand2'])} 5'</div>"
+            <div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'])}</span> <span>3'</span></div><div class='separator'>| | | | | | | | | | |</div><div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'])}</span> <span>5'</span></div>
             html_micro += "</div>"
 
     html_micro += "</div></div>"
