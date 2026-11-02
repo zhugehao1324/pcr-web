@@ -9,7 +9,7 @@ if 'cycle' not in st.session_state:
 if 'phase' not in st.session_state:
     st.session_state.phase = "准备阶段"
 
-# 初始数据：1个纯绿色原链组成的DNA分子链（双链）
+# 初始数据：完美的互补配对双链 (A-T, C-G)
 if 'dna_pool' not in st.session_state:
     st.session_state.dna_pool = [
         {
@@ -25,36 +25,62 @@ col_micro, col_macro = st.columns([2, 1])
 with col_micro:
     st.subheader("🔬 微观：DNA 结构变化")
     
-    st.markdown("<style>.tube{background-color:#f0f8ff;border:2px solid #add8e6;border-radius:10px;padding:15px;min-height:400px;}.dna-row{display:flex;flex-wrap:wrap;gap:15px;}.dna-card{background-color:#fff;border:1px solid #ccc;border-left:5px solid #4CAF50;padding:12px;border-radius:5px;font-family:monospace;font-size:16px;line-height:1.8;letter-spacing:1px;box-shadow:2px 2px 5px rgba(0,0,0,0.1);width:330px;}.seq-line{display:flex;justify-content:space-between;align-items:center;white-space:nowrap;margin:4px 0;}.green{color:#2e7d32;font-weight:bold;}.yellow{color:#d4a017;font-weight:bold;background-color:#fff3cd;padding:2px;border-radius:3px;}.red{color:#d62728;font-weight:bold;background-color:#fae6e6;padding:2px;border-radius:3px;}.separator{color:#aaa;font-size:12px;text-align:center;margin:2px 0;}</style>", unsafe_allow_html=True)
+    st.markdown("<style>.tube{background-color:#f0f8ff;border:2px solid #add8e6;border-radius:10px;padding:15px;min-height:400px;}.dna-row{display:flex;flex-wrap:wrap;gap:15px;}.dna-card{background-color:#fff;border:1px solid #ccc;border-left:5px solid #4CAF50;padding:12px;border-radius:5px;font-family:monospace;font-size:16px;line-height:1.8;letter-spacing:1px;box-shadow:2px 2px 5px rgba(0,0,0,0.1);width:380px;}.seq-line{display:flex;justify-content:space-between;align-items:center;white-space:nowrap;margin:4px 0;}.green{color:#2e7d32;font-weight:bold;}.yellow{color:#d4a017;font-weight:bold;background-color:#fff3cd;padding:2px 4px;border-radius:3px;}.red{color:#d62728;font-weight:bold;background-color:#fae6e6;padding:2px 4px;border-radius:3px;}.separator{color:#aaa;font-size:12px;text-align:center;margin:2px 0;letter-spacing:3px;}</style>", unsafe_allow_html=True)
     
     html_micro = "<div class='tube'><div class='dna-row'>"
     
-    def render_strand(strand):
+    def render_strand(strand, is_top=True):
         if strand['type'] == 'original':
             return f"<span class='green'>{strand['seq']}</span>"
         elif strand['type'] == 'hybrid':
-            return f"<span class='yellow'>[{strand['primer']}]</span><span class='red'>{strand['ext']}</span>"
+            # 去掉了中括号
+            if is_top:
+                return f"<span class='yellow'>{strand['primer']}</span> <span class='red'>{strand['ext']}</span>"
+            else:
+                return f"<span class='red'>{strand['ext']}</span> <span class='yellow'>{strand['primer']}</span>"
         elif strand['type'] == 'pure_new':
             return f"<span class='red'>{strand['seq']}</span>"
 
     if st.session_state.phase == "变性":
-        st.markdown("<div style='color: #ff9800; font-weight: bold; margin-bottom: 10px;'>💥 90℃以上：氢键断裂，双链解开</div>", unsafe_allow_html=True)
-        # 🚨 修改点 1：上限改成 8
+        st.markdown("<div style='color: #ff9800; font-weight: bold; margin-bottom: 10px;'>💥 90℃以上：双链解开，氢键断裂</div>", unsafe_allow_html=True)
         for i, dna in enumerate(st.session_state.dna_pool[:8]):
-            html_micro += f"<div class='dna-card' style='border-left-color:#ff9800;'><div style='color:#888;'>DNA分子链 {i+1} 解链</div>"
-            html_micro += f"<div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'])}</span> <span>3'</span></div><div class='separator'>-- 氢键断裂 --</div><div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'])}</span> <span>5'</span></div>"
+            html_micro += f"<div class='dna-card' style='border-left-color:#ff9800;'><div style='color:#888;'>分子 {i+1} 解链</div>"
+            html_micro += f"<div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'], True)}</span> <span>3'</span></div>"
+            html_micro += f"<div class='separator' style='height: 20px;'>-- 氢键断裂 --</div>"
+            html_micro += f"<div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'], False)}</span> <span>5'</span></div>"
             html_micro += "</div>"
-    else:
-        # 🚨 修改点 2：上限改成 8
+            
+    elif st.session_state.phase == "复性":
+        st.markdown("<div style='color: #2196F3; font-weight: bold; margin-bottom: 10px;'>❄️ 50℃左右：引物与单链特定序列结合</div>", unsafe_allow_html=True)
         for i, dna in enumerate(st.session_state.dna_pool[:8]):
-            html_micro += f"<div class='dna-card'><div style='color:#888;'>DNA分子链 {i+1}</div>"
-            html_micro += f"<div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'])}</span> <span>3'</span></div><div class='separator'>| | | | | | | | | | |</div><div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'])}</span> <span>5'</span></div>"
+            html_micro += f"<div class='dna-card' style='border-left-color:#2196F3;'><div style='color:#888;'>分子 {i+1} 结合引物</div>"
+            
+            # 上半部分：原链，引物在右侧 3' 端
+            html_micro += f"<div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'], True)}</span> <span>3'</span></div>"
+            # 引物利用透明占位符对齐左侧，左侧留出 7 个碱基的空位
+            html_micro += f"<div class='seq-line'><span style='visibility: hidden;'>3'</span> <span style='visibility: hidden;'>A T G C G T A</span> <span class='yellow'>G C A T</span> <span>5'</span></div>"
+            
+            html_micro += f"<div class='separator'> </div>"
+            
+            # 下半部分：引物在左侧 3' 端，原链在下面
+            # 引物右侧留出 7 个碱基的空位
+            html_micro += f"<div class='seq-line'><span>5'</span> <span class='yellow'>A T G C</span> <span style='visibility: hidden;'>C A T G C A T</span> <span style='visibility: hidden;'>3'</span></div>"
+            html_micro += f"<div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'], False)}</span> <span>5'</span></div>"
+            
+            html_micro += "</div>"
+
+    else:
+        # 准备阶段，或者延伸后的完整双链
+        for i, dna in enumerate(st.session_state.dna_pool[:8]):
+            html_micro += f"<div class='dna-card'><div style='color:#888;'>分子 {i+1}</div>"
+            html_micro += f"<div class='seq-line'><span>5'</span> <span>{render_strand(dna['strand1'], True)}</span> <span>3'</span></div>"
+            html_micro += f"<div class='separator'>| | | | | | | | | | |</div>"
+            html_micro += f"<div class='seq-line'><span>3'</span> <span>{render_strand(dna['strand2'], False)}</span> <span>5'</span></div>"
             html_micro += "</div>"
 
     html_micro += "</div></div>"
     st.markdown(html_micro, unsafe_allow_html=True)
     
-    # 🚨 修改点 3：提示文字同步改
     if len(st.session_state.dna_pool) > 8:
         st.write(f"... (还有 {len(st.session_state.dna_pool) - 8} 个 DNA 分子链未展示)")
 
@@ -132,20 +158,16 @@ with col3:
                 # 1. 第一条链做模板
                 s1 = dna["strand1"]
                 if s1["type"] == "original":
-                    new_pool.append({"strand1": s1, "strand2": {"type": "hybrid", "primer": "T A C G", "ext": "C A T G C A T"}})
-                elif s1["type"] == "hybrid":
-                    new_pool.append({"strand1": s1, "strand2": {"type": "pure_new", "seq": "G C A T G C A T G C A"}})
+                    new_pool.append({"strand1": s1, "strand2": {"type": "hybrid", "primer": "G C A T", "ext": "T A C G C A T"}})
                 else:
-                    new_pool.append({"strand1": s1, "strand2": {"type": "pure_new", "seq": "C G T A C G T A C G T"}})
+                    new_pool.append({"strand1": s1, "strand2": {"type": "pure_new", "seq": "T A C G C A T G C A T"}})
                 
                 # 2. 第二条链做模板
                 s2 = dna["strand2"]
                 if s2["type"] == "original":
-                    new_pool.append({"strand1": s2, "strand2": {"type": "hybrid", "primer": "A T G C", "ext": "G T A C G T A"}})
-                elif s2["type"] == "hybrid":
-                    new_pool.append({"strand1": s2, "strand2": {"type": "pure_new", "seq": "C G T A C G T A C G T"}})
+                    new_pool.append({"strand1": {"type": "hybrid", "primer": "A T G C", "ext": "G T A C G T A"}, "strand2": s2})
                 else:
-                    new_pool.append({"strand1": s2, "strand2": {"type": "pure_new", "seq": "G C A T G C A T G C A"}})
+                    new_pool.append({"strand1": {"type": "pure_new", "seq": "A T G C G T A C G T A"}, "strand2": s2})
             
             st.session_state.dna_pool = new_pool
             st.rerun()
@@ -161,6 +183,8 @@ if st.button("🔄 重置实验"):
         }
     ]
     st.rerun()
+
+# 水印
 st.markdown(
     """
     <div style="
