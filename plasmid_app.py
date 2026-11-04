@@ -9,12 +9,12 @@ if 'cleavage_success' not in st.session_state:
 
 col_left, col_right = st.columns([1.2, 1])
 
-with col_left:
-    st.subheader("🔬 实验台图谱")
-    try:
+#with col_left:
+    #st.subheader("🔬 实验台图谱")
+    #try:
         #st.image("plasmid_map.png", caption="质粒载体与S基因图谱", use_container_width=True)
-    except FileNotFoundError:
-        st.error("⚠️ 找不到图片！请确保图片命名为 'plasmid_map.png' 并且和代码文件放在了同一个文件夹里。")
+    #except FileNotFoundError:
+       #st.error("⚠️ 找不到图片！请确保图片命名为 'plasmid_map.png' 并且和代码文件放在了同一个文件夹里。")
 
 with col_right:
     st.subheader("✂️ 第一步：限制酶选择区")
