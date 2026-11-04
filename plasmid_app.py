@@ -8,7 +8,8 @@ if 'cleavage_success' not in st.session_state:
     st.session_state.cleavage_success = False
 
 col_left, col_right = st.columns([1.2, 1])
-
+import streamlit as st
+from PIL import Image # 🚨 新增这一行
 with col_left:
     st.subheader("🔬 实验台图谱")
     try:
